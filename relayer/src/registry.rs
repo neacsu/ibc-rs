@@ -28,10 +28,7 @@ define_error! {
 
         MissingChain
             { chain_id: ChainId }
-            | e | {
-                format_args!("missing chain for id ({}) in configuration file",
-                    e.chain_id)
-            }
+            | e | { format_args!("missing chain configuration for chain '{}'", e.chain_id) }
     }
 }
 

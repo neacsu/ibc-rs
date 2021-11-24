@@ -674,12 +674,12 @@ impl<Chain: ChainHandle + 'static> Supervisor<Chain> {
             let src = self
                 .registry
                 .get_or_spawn(object.src_chain_id())
-                .map_err(Error::spawn)?;
+                .map_err(|e| Error::spawn(object.src_chain_id().clone(), e))?;
 
             let dst = self
                 .registry
                 .get_or_spawn(object.dst_chain_id())
-                .map_err(Error::spawn)?;
+                .map_err(|e| Error::spawn(object.dst_chain_id().clone(), e))?;
 
             let worker = {
                 let config = self.config.read().expect("poisoned lock");

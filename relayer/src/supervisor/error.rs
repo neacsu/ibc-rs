@@ -63,8 +63,9 @@ define_error! {
             |_| { "supervisor was not able to connect to any chains" },
 
         Spawn
+            { chain_id: ChainId }
             [ SpawnError ]
-            |_| { "supervisor was not able to connect to any chains" },
+            |e| { format_args!("unable to spawn chain runtime for chain '{}'", e.chain_id) },
 
         Worker
             [ WorkerError ]

@@ -387,7 +387,7 @@ impl<'a, Chain: ChainHandle + 'static> SpawnContext<'a, Chain> {
         let counterparty_chain = self
             .registry
             .get_or_spawn(&client.client_state.chain_id())
-            .map_err(Error::spawn)?;
+            .map_err(|e| Error::spawn(client.client_state.chain_id(), e))?;
 
         connection_state_on_destination(connection, &counterparty_chain)
     }
@@ -409,7 +409,7 @@ impl<'a, Chain: ChainHandle + 'static> SpawnContext<'a, Chain> {
         let counterparty_chain = self
             .registry
             .get_or_spawn(&client.client_state.chain_id())
-            .map_err(Error::spawn)?;
+            .map_err(|e| Error::spawn(client.client_state.chain_id(), e))?;
 
         let conn_state_src = connection.connection_end.state;
         let conn_state_dst =
@@ -473,7 +473,7 @@ impl<'a, Chain: ChainHandle + 'static> SpawnContext<'a, Chain> {
         let counterparty_chain = self
             .registry
             .get_or_spawn(&client.client_state.chain_id())
-            .map_err(SupervisorError::spawn)?;
+            .map_err(|e| SupervisorError::spawn(client.client_state.chain_id(), e))?;
 
         let counterparty_channel =
             channel_on_destination(&channel, connection, &counterparty_chain)?;
