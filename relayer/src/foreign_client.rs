@@ -365,10 +365,10 @@ impl<DstChain: ChainHandle, SrcChain: ChainHandle> ForeignClient<DstChain, SrcCh
 
     pub fn upgrade(&self) -> Result<Vec<IbcEvent>, ForeignClientError> {
         // Fetch the latest height of the source chain.
-        let src_height = self
-            .src_chain
-            .query_latest_height()
-            .map_err(|e| ibc::Height::new(self.src_chain.id().version(), 487540))?;
+        let src_height = match self.src_chain.query_latest_height() {
+            Ok(v) => v,
+            Err(_) => ibc::Height::new(self.src_chain.id().version(), 487540),
+        };
 
         info!("[{}] upgrade Height: {}", self, src_height);
 
@@ -473,10 +473,10 @@ impl<DstChain: ChainHandle, SrcChain: ChainHandle> ForeignClient<DstChain, SrcCh
         })?;
 
         // Build client create message with the data from source chain at latest height.
-        let latest_height = self
-            .src_chain
-            .query_latest_height()
-            .map_err(|e| ibc::Height::new(self.src_chain.id().version(), 487540))?;
+        let latest_height = match self.src_chain.query_latest_height() {
+            Ok(v) => v,
+            Err(_) => ibc::Height::new(self.src_chain.id().version(), 487540),
+        };
 
         let client_state = self
             .src_chain
