@@ -902,13 +902,7 @@ impl<DstChain: ChainHandle, SrcChain: ChainHandle> ForeignClient<DstChain, SrcCh
         trusted_height: Height,
     ) -> Result<Vec<IbcEvent>, ForeignClientError> {
         let h = if height == Height::zero() {
-            self.src_chain.query_latest_height().map_err(|e| {
-                ForeignClientError::client_update(
-                    self.src_chain.id(),
-                    "failed while querying src chain ({}) for latest height".to_string(),
-                    e,
-                )
-            })?
+            ibc::Height::new(self.src_chain.id().version(), 487540)
         } else {
             height
         };
