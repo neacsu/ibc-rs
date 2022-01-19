@@ -815,7 +815,10 @@ impl<DstChain: ChainHandle, SrcChain: ChainHandle> ForeignClient<DstChain, SrcCh
             self.validate_trusted_height(target_height, trusted_height, &client_state)?;
             trusted_height
         };
-        println!("now here round 4");
+        println!(
+            "now here round 4 trusted height {:?} target height {:?}",
+            trusted_height, target_height
+        );
 
         if trusted_height >= target_height {
             warn!(
