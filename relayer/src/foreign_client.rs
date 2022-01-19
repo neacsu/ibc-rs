@@ -900,6 +900,7 @@ impl<DstChain: ChainHandle, SrcChain: ChainHandle> ForeignClient<DstChain, SrcCh
             height
         };
 
+        println!("and here");
         let new_msgs = self.build_update_client_with_trusted(h, trusted_height)?;
         if new_msgs.is_empty() {
             return Err(ForeignClientError::client_already_up_to_date(
@@ -908,6 +909,7 @@ impl<DstChain: ChainHandle, SrcChain: ChainHandle> ForeignClient<DstChain, SrcCh
                 h,
             ));
         }
+        println!("Wrapping up here");
 
         let events = self
             .dst_chain()
