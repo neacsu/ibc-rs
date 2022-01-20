@@ -70,6 +70,7 @@ impl ProdChainHandle {
         let input = f(sender);
 
         self.runtime_sender.send(input).map_err(Error::send)?;
+        println!("Managed to send");
 
         receiver.recv().map_err(Error::channel_receive)?
     }

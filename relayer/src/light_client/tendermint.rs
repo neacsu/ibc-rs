@@ -47,8 +47,11 @@ impl super::LightClient<CosmosSdkChain> for LightClient {
         target: ibc::Height,
         client_state: &AnyClientState,
     ) -> Result<Verified<TmHeader>, Error> {
+        println!("Verifying");
         let Verified { target, supporting } = self.verify(trusted, target, client_state)?;
+        println!("Verified");
         let (target, supporting) = self.adjust_headers(trusted, target, supporting)?;
+        println!("Adjusted");
         Ok(Verified { target, supporting })
     }
 
@@ -60,12 +63,14 @@ impl super::LightClient<CosmosSdkChain> for LightClient {
     ) -> Result<Verified<LightBlock>, Error> {
         trace!(%trusted, %target, "light client verification");
 
+        println!("Try from");
         let target_height =
             TMHeight::try_from(target.revision_height).map_err(Error::invalid_height)?;
 
         let client = self.prepare_client(client_state)?;
         let mut state = self.prepare_state(trusted)?;
 
+        println!("Verify_to_target {:?}", target_height);
         // Verify the target header
         let target = client
             .verify_to_target(target_height, &mut state)

@@ -521,6 +521,7 @@ where
                 let support = support.into_iter().map(|h| h.wrap_any()).collect();
                 (header, support)
             });
+        println!("Result to be sent: {:?}", result);
 
         reply_to.send(result).map_err(Error::send)
     }

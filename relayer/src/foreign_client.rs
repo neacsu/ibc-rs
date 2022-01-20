@@ -793,13 +793,13 @@ impl<DstChain: ChainHandle, SrcChain: ChainHandle> ForeignClient<DstChain, SrcCh
         target_height: Height,
         trusted_height: Height,
     ) -> Result<Vec<Any>, ForeignClientError> {
-        let latest_height = match self.src_chain.query_latest_height() {
+        let latest_height = || {match self.src_chain.query_latest_height() {
             Ok(v) => v,
             Err(_) => ibc::Height::new(self.src_chain.id().version(), 487540),
-        };
+        }};
 
         // Wait for source chain to reach `target_height`
-        while latest_height()? < target_height {
+        while latest_height() < target_height {
             thread::sleep(Duration::from_millis(100))
         }
 
@@ -905,7 +905,7 @@ impl<DstChain: ChainHandle, SrcChain: ChainHandle> ForeignClient<DstChain, SrcCh
             height
         };
 
-        println!("and here");
+        println!("and here: target ({:?}), trusted ({:?})", h, trusted_height);
         let new_msgs = self.build_update_client_with_trusted(h, trusted_height)?;
         if new_msgs.is_empty() {
             return Err(ForeignClientError::client_already_up_to_date(
